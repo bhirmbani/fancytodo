@@ -17,10 +17,12 @@ const Strategy = require('passport-local').Strategy;
 passport.use(new Strategy(authController.signin));
 
 // routes
+const todos = require('./routes/todo');
 const users = require('./routes/user');
 const auth = require('./routes/auth');
 
 // use the routes
+app.use('/api/todos', todos);
 app.use('/api/users', users);
 app.use('/', auth);
 

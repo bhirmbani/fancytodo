@@ -17,7 +17,7 @@ methods.signup = (req, res, next) => {
   }, (err, user) => {
     if(err) {
       res.json({
-        error: error,
+        error: err,
         success: false,
       })
     } else {
