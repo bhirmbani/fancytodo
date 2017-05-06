@@ -14,6 +14,18 @@ const Strategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('./models/user');
 
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function(id, done) {
+  // done(null, obj);
+  User.findById(id, (err, user) => {
+    done(err, user);
+    console.log(user)
+  })
+});
+
 passport.use(new Strategy(authController.signin));
 passport.use(new FacebookStrategy({
   clientID: process.env.FB_APP_ID,
@@ -24,16 +36,14 @@ passport.use(new FacebookStrategy({
       if(err) {
         console.log(err);
       }
-      if(!err && user !== null) {
-        done(null, user);
-      } else {
+      else {
         let newUser = new User();
 
           newUser.facebook.id = profile.id,
           newUser.facebook.token = accessToken,
           // newUser.facebook.email = profile.emails[0].value,
           newUser.facebook.name = profile.displayName,
-          // newUser.facebook.createdAt = Date.now
+          newUser.facebook.createdAt = new Date()
 
         newUser.save((err) => {
           if(err) {
@@ -63,6 +73,8 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token")
     next()
 })
+
+app.use(passport.initialize());
 
 // use the routes
 app.use('/api/todos', todos);
