@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../helpers/verify');
 const todo = require('../controllers/todo');
 
-router.post('/create', todo.create);
+router.post('/create', auth.isLogin, todo.create);
 router.get('/', auth.isLogin, todo.getAll);
 
 module.exports = router;
