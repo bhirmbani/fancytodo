@@ -18,7 +18,8 @@ let userSchema = new Schema({
     id: String,
     token: String,
     email: String,
-    name: String
+    name: String,
+    createdAt: Date
   }
 })
 
