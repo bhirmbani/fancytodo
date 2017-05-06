@@ -13,6 +13,12 @@ let userSchema = new Schema({
   },
   role: {
       type: String
+  },
+  facebook: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
   }
 })
 
