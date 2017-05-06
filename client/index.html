@@ -21,7 +21,7 @@
     <!-- <a href="/auth/facebook">Login With Facebook</a> -->
     <!-- <button v-on:click="facebookLogin" class="btn btn-primary">Login With facebook</button> -->
     <!-- <a v-bind:href="title">Login with facebook</a> -->
-    <a href="http://localhost:4000/auth/facebook">Login with facebook</a>
+    <a href="http://localhost:4000/auth/facebook">Login With Facebook</a>
   </div>
   
   <script>
@@ -42,6 +42,7 @@
           localStorage.clear();
           window.location.href = 'index.html';
         },
+      },
       created: function() {
         this.getAllTodos();
       }
