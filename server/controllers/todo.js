@@ -13,4 +13,14 @@ methods.create = (req, res, next) => {
   })
 }
 
+methods.getAll = (req, res, next) => {
+  Todo.find({}, (err, todo) => {
+    if(err) {
+      res.json({error: err, success: false});
+    } else {
+      res.json({todo: todo, success: true});
+    }
+  })
+}
+
 module.exports = methods;

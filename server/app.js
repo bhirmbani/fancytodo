@@ -1,13 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors')
 require('dotenv').config()
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fancytodo');
-
-app.set('port', process.env.PORT || 3000);
-app.use(bodyParser.urlencoded({extended: false}));
 
 // passport
 const authController = require('./controllers/auth')
@@ -20,6 +18,17 @@ passport.use(new Strategy(authController.signin));
 const todos = require('./routes/todo');
 const users = require('./routes/user');
 const auth = require('./routes/auth');
+
+app.set('port', process.env.PORT || 4000);
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token")
+    next()
+})
 
 // use the routes
 app.use('/api/todos', todos);

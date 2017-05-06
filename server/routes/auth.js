@@ -4,9 +4,7 @@ const authController = require('../controllers/auth');
 const passport = require('passport')
 
 
-router.post('/signin', passport.authenticate('local', {
-    session: false
-}), function(req, res) {
+router.post('/signin', passport.authenticate('local', {session: false}), function(req, res) {
     var user = req.user;
     res.send(user);
 });
