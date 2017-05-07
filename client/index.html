@@ -11,6 +11,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
 
@@ -30,17 +31,27 @@
     
     <div class="container">
       <div class="row">
-        <div v-on:click="onCompleted" v-for="todo in todos" class="col-lg-4 col-md-4 col-sm-4 col-xs-6" v-bind:class="{ completed: todo.status, uncompleted: !todo.status }">
+      <template v-for="todo in todos">
+        <div v-on:click="onClick" class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos" v-bind:class="{ completed: todo.status, uncompleted: !todo.status }">
           <h1>{{todo.title}}</h1>
           <p>{{todo.content}}</p>
-          <span>{{todo.createdAt}}</span>
+          <p>Dibikin: {{todo.createdAt}}</p>
+          <a href="/edit.html">Edit this todo</a>
+          <!-- <span>{{todo.id}}</span> -->
+         <!--  <form>
+            <button>Complete</button>
+          </form> -->
         </div>
+      </template>
+        
       </div>
     </div>
 
   </div>
   
   <script>
+
+
     var app = new Vue({
       el: '#index',
       data: {
@@ -58,7 +69,7 @@
           .then(res => {
             console.log(res); // array isinya object
             self.todos = res.data.todo;
-            console.log(self.todos)
+            // console.log(self.todos)
           })
         },
         onLogOut: function() {
@@ -72,9 +83,9 @@
             if(res.data.success = true) {
               self.logOutFbLink = `https://graph.facebook.com/${res.data.facebook.id}/permissions?access_token=${res.data.facebook.token}`;
               self.fbToken = res.data.facebook.token;
-              console.log(self.logOutFbLink)
+              // console.log(self.logOutFbLink)
             } else {
-              console.log(res.data)
+              // console.log(res.data)
             }
           })
         },
@@ -98,14 +109,44 @@
               self.isNotYet = true;
             }
           })
+        },
+        completeTodo: function() {
+          let self = this;
+          axios.put('http://localhost:4000/api/todos/complete/')
+        },
+        onClick: function (e) {
+          let clickedElement = e.target;
+          // let fontAwesome = document.createElement("i"); 
+          if(clickedElement.classList.contains('completed')) {
+              clickedElement.classList.remove('completed');
+              clickedElement.classList.add('uncompleted');
+              // fontAwesome.classList.add('fa', 'fa-times-circle-o')
+              // clickedElement.appendChild(fontAwesome)
+          } else if(clickedElement.classList.contains('uncompleted')) {
+              clickedElement.classList.remove('uncompleted');
+              clickedElement.classList.add('completed');
+              // fontAwesome.classList.add('fa', 'fa-check-circle-o')
+              // clickedElement.appendChild(fontAwesome)
+          }
+            
+            
           
+          console.log(clickedElement.classList.contains('completed'));
+          // testElement.classList.contains(className)
         }
       },
       created: function() {
         this.getAllTodos();
         this.getFbLogoutLink();
+      },
+      computed: {
+        gettodos() {
+          return this.todos;
+        }
       }
     })
+
   </script>
+
 </body>
 </html>

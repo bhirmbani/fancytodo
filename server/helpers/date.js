@@ -9,5 +9,8 @@ module.exports = {
     year: function(date) {
         return moment(date)
             .format("dddd, D MMM YYYY");
+    },
+    fromNow: function(date) {
+        return moment(date).fromNow();
     }
 }

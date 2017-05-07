@@ -26,8 +26,8 @@ methods.getAll = (req, res, next) => {
         obj.id = val._id;
         obj.title = val.title;
         obj.content = val.content;
-        obj.createdAt = moment.year(val.createdAt);
-        obj.updatedAt = moment.year(val.updatedAt);
+        obj.createdAt = moment.fromNow(val.createdAt);
+        obj.updatedAt = moment.fromNow(val.updatedAt);
         obj.status = val.status;
         arr.push(obj);
       })
