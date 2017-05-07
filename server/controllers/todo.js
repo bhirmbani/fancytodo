@@ -5,7 +5,8 @@ const methods = {};
 methods.create = (req, res, next) => {
   let title = req.body.title;
   let content = req.body.content;
-  Todo.create({title: title, content: content}, (err, todo) => {
+  let status = 'not completed';
+  Todo.create({title: title, content: content, status: status}, (err, todo) => {
     if(err) {
       res.json({error: err, success: false});
     } else {

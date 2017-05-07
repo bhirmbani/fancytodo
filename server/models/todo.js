@@ -7,6 +7,9 @@ let todoSchema = new Schema({
   },
   content: {
       type: String
+  },
+  status: {
+    type: String
   }
 }, {timestamps: true})
 
