@@ -54,4 +54,14 @@ methods.uncomplete = (req, res, next) => {
   })
 }
 
+methods.edit = (req, res, next) => {
+  let query = { _id: req.params.id }
+  let title = req.body.title;
+  let content = req.body.content;
+  let status = req.body.status;
+  Todo.findOneAndUpdate(query, { $set: { title: title, content: content,  status: status } }, function(err, todo) {
+    res.send(todo)
+  })
+}
+
 module.exports = methods;
