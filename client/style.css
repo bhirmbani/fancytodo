@@ -1,0 +1,15 @@
+.completed {
+  background-color: #00FF80;
+  margin: 10px;
+  width: 350px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.uncompleted {
+  background-color: #FF0000;
+  margin: 10px;
+  width: 350px;
+  height: 200px;
+  cursor: pointer;
+}

@@ -5,8 +5,8 @@ const methods = {};
 methods.create = (req, res, next) => {
   let title = req.body.title;
   let content = req.body.content;
-  let status = 'not completed';
-  Todo.create({title: title, content: content, status: status}, (err, todo) => {
+  let status = false;
+  Todo.create({title: title, content: content, status: status }, (err, todo) => {
     if(err) {
       res.json({error: err, success: false});
     } else {
@@ -28,10 +28,29 @@ methods.getAll = (req, res, next) => {
         obj.content = val.content;
         obj.createdAt = moment.year(val.createdAt);
         obj.updatedAt = moment.year(val.updatedAt);
+        obj.status = val.status;
         arr.push(obj);
       })
       res.json({todo: arr, success: true});
     }
+  })
+}
+
+methods.complete = (req, res, next) => {
+  let query = { _id: req.params.id }
+  let arr = [];
+  Todo.findOneAndUpdate(query, { $set: { status: true } }, function(err, todo) {
+    // arr.push(todo)
+    res.send(todo);
+  })
+}
+
+methods.uncomplete = (req, res, next) => {
+  let query = { _id: req.params.id }
+  let arr = [];
+  Todo.findOneAndUpdate(query, { $set: { status: false } }, function(err, todo) {
+    // arr.push(todo)
+    res.send(todo);
   })
 }
 

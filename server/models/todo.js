@@ -9,7 +9,7 @@ let todoSchema = new Schema({
       type: String
   },
   status: {
-    type: String
+    type: Boolean
   }
 }, {timestamps: true})
 

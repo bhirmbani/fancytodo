@@ -11,6 +11,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 
 
 </head>
@@ -29,7 +30,7 @@
     
     <div class="container">
       <div class="row">
-        <div v-for="todo in todos" class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+        <div v-on:click="onCompleted" v-for="todo in todos" class="col-lg-4 col-md-4 col-sm-4 col-xs-6" v-bind:class="{ completed: todo.status, uncompleted: !todo.status }">
           <h1>{{todo.title}}</h1>
           <p>{{todo.content}}</p>
           <span>{{todo.createdAt}}</span>
@@ -46,7 +47,9 @@
         title: 'Index Page',
         logOutFbLink: '',
         fbToken: '',
-        todos: []
+        todos: [],
+        isCompleted: false,
+        isNotYet: true
       },
       methods: {
         getAllTodos: function() {
@@ -81,6 +84,21 @@
             .then(res => {
               window.location.href = 'index.html'
             })
+        },
+        onCompleted: function() {
+          let self = this;
+          this.todos.forEach(function(val) {
+            if(!val.status) {
+              val.status = true;
+              self.isCompleted = true;
+              self.isNotYet = false;
+            } else if (val.status) {
+              val.status = false;
+              self.isCompleted = false;
+              self.isNotYet = true;
+            }
+          })
+          
         }
       },
       created: function() {
