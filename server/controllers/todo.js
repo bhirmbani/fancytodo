@@ -64,4 +64,11 @@ methods.edit = (req, res, next) => {
   })
 }
 
+methods.findById = (req, res, next) => {
+  let id = req.params.id;
+  Todo.findById(id, (err, todo) => {
+    res.send(todo);
+  })
+}
+
 module.exports = methods;

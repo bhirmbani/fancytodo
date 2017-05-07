@@ -13,4 +13,7 @@ router.put('/uncomplete/:id', auth.isLogin, todo.uncomplete);
 // edit
 router.put('/edit/:id', auth.isLogin, todo.edit);
 
+// find
+router.get('/find/:id', auth.isLogin, todo.findById);
+
 module.exports = router;
