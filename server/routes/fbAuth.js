@@ -12,6 +12,8 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: 'http://127.0.0.1:8080/'
 }));
 
-router.get('/auth/facebook/logout', fbAuth.logout);
+router.get('/auth/facebook/latestFbUser', fbAuth.getLatestUser);
+
+router.get('/auth/facebook/getLogOutLink', fbAuth.getLogOutLink);
 
 module.exports = router;
