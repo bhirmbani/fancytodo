@@ -7,7 +7,7 @@ methods.signup = (req, res, next) => {
   var name = req.body.name;
   var username = req.body.username;
   var password = passwordHash.generate(req.body.password);
-  var role = req.body.role;
+  var role = 'User';
   
   User.create({
     name: name,

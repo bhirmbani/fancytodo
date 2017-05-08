@@ -28,6 +28,7 @@
 
       <ul class="nav navbar-nav navbar-right navbar-color">
           <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a v-on:click="onLogOut" href="index.html">Logout</a></li>
           <li><a href="http://localhost:4000/auth/facebook">Login With FB</a></li>
       </ul>
@@ -54,20 +55,19 @@
       <!-- </form> -->
         
       </div>
-      <template v-for="todo in todos">
+      <template v-for="(todo, index) in todos">
         <div v-on:click="onClick" class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos" v-bind:class="{ completed: todo.status, uncompleted: !todo.status }">
           <h1>{{todo.title}}</h1>
           <p>{{todo.content}}</p>
           <p>Dibikin: {{todo.createdAt}}</p>
-          <a href="">Complete Todo</a>
+          <!-- <p>Index: {{index}}</p> -->
           <!-- <a href="edit-todo.html">Edit this todo</a> -->
-          <!-- <form class="text-center">
+          <!-- <div class="text-center">
             <select class="form-control" name="idTodo">
-            <option v-bind:value="todo.id">Completed</option>
-            <option>Uncomplete</option>
+            <option v-bind:value="todo.id">{{todo.id}}</option>
             </select>
             <button v-on:click="completeTodo" class="btn-xs btn-default">Submit</button>
-          </form> -->
+          </div> -->
         </div>
       </template>
         
@@ -101,8 +101,16 @@
           .then(res => {
             console.log(res); // array isinya object
             self.todos = res.data.todo;
-            // console.log(self.todos)
+            console.log(self.todos)
           })
+        },
+        getTodoById: function() {
+          let self = this;
+          console.log(this.todos)
+          // axios.get('http://localhost:4000/api/todos/find/', {headers: {token: localStorage.getItem('token')}})
+          // .then(res => {
+
+          // })
         },
         onLogOut: function() {
           localStorage.clear();
@@ -144,7 +152,7 @@
         },
         completeTodo: function() {
           let self = this;
-          console.log(self.selected)
+          console.log(this.idSelected)
           // axios.put(`http://localhost:4000/api/todos/complete/`)
         },
         onClick: function (e) {
@@ -161,9 +169,6 @@
               // fontAwesome.classList.add('fa', 'fa-check-circle-o')
               // clickedElement.appendChild(fontAwesome)
           }
-            
-            
-          
           console.log(clickedElement.classList.contains('completed'));
           // testElement.classList.contains(className)
         },
@@ -177,6 +182,8 @@
           .then(res => {
             window.location.href = 'index.html';
             alert(`${res.data.todo.title} berhasil kamu tambahkan ke daftar todo`);
+          }).catch(err => {
+            alert('kamu harus login dulu');
           })
         }
       },
