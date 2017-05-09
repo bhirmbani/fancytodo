@@ -16,4 +16,7 @@ router.put('/edit/:id', auth.isLogin, todo.edit);
 // find
 router.get('/find/:id', auth.isLogin, todo.findById);
 
+// delete
+router.delete('/delete/:id', auth.isLogin, todo.delete);
+
 module.exports = router;

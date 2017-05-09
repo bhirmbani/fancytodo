@@ -3,7 +3,8 @@
   margin: 10px;
   width: 350px;
   height: 200px;
-  cursor: pointer;
+  /*cursor: pointer;*/
+  border-radius: 20px;
 }
 
 .uncompleted {
@@ -11,7 +12,8 @@
   margin: 10px;
   width: 350px;
   height: 200px;
-  cursor: pointer;
+  /*cursor: pointer;*/
+  border-radius: 20px;
 }
 
 .navbar-default {

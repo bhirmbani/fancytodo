@@ -74,4 +74,15 @@ methods.findById = (req, res, next) => {
   })
 }
 
+methods.delete = (req, res, next) => {
+  let id = req.params.id;
+  Todo.findByIdAndRemove(id, (err, done) => {
+    if(err) {
+      res.json({error: err, success: false});
+    } else {
+      res.json({done: done, success: true});
+    }
+  })
+}
+
 module.exports = methods;

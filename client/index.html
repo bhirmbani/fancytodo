@@ -56,18 +56,13 @@
         
       </div>
       <template v-for="(todo, index) in todos">
-        <div v-on:click="completeTodo(todo.id)" class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos" v-bind:class="{ completed: todo.status, uncompleted: !todo.status }">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos text-center" v-bind:class="{ completed: todos[index].status, uncompleted: !todos[index].status }">
           <h1>{{todo.title}}</h1>
           <p>{{todo.content}}</p>
           <p>Dibikin: {{todo.createdAt}}</p>
-          <!-- <p>Index: {{index}}</p> -->
-          <!-- <a href="edit-todo.html">Edit this todo</a> -->
-          <!-- <div class="text-center">
-            <select class="form-control" name="idTodo">
-            <option v-bind:value="todo.id">{{todo.id}}</option>
-            </select>
-            <button v-on:click="completeTodo" class="btn-xs btn-default">Submit</button>
-          </div> -->
+          <button @click="completeTodo(todo.id, index)" class="btn-sm btn-primary">complete</button>
+          <button @click="uncompleteTodo(todo.id, index)" class="btn-sm btn-warning">uncomplete</button>
+          <button @click="deleteTodo(todo.id, index)" class="btn-sm btn-danger">delete</button>
         </div>
       </template>
         
@@ -80,6 +75,7 @@
   
   <script>
 
+  
 
     var app = new Vue({
       el: '#index',
@@ -91,90 +87,90 @@
         title: '',
         content: '',
         isCompleted: false,
-        isNotYet: true,
-        idSelected: ''
       },
       methods: {
         getAllTodos: function() {
           let self = this;
           axios.get('http://localhost:4000/api/todos/', {headers: {token: localStorage.getItem('token')}})
           .then(res => {
-            console.log(res); // array isinya object
             self.todos = res.data.todo;
-            console.log(self.todos)
           })
-        },
-        getTodoById: function() {
-          let self = this;
-          console.log(this.todos)
-          // axios.get('http://localhost:4000/api/todos/find/', {headers: {token: localStorage.getItem('token')}})
-          // .then(res => {
-
-          // })
         },
         onLogOut: function() {
           localStorage.clear();
-          window.location.href = 'index.html';
+          // window.location.href = 'index.html';
         },
-        getFbLogoutLink: function() {
-          let self = this;
-          axios.get('http://localhost:4000/auth/facebook/latestFbUser')
-          .then(res => {
-            if(res.data.success = true) {
-              self.logOutFbLink = `https://graph.facebook.com/${res.data.facebook.id}/permissions?access_token=${res.data.facebook.token}`;
-              self.fbToken = res.data.facebook.token;
-              // console.log(self.logOutFbLink)
-            } else {
-              // console.log(res.data)
-            }
-          })
-        },
-        onFbLogOut: function() {
-          let self = this;
-          axios.delete(self.logOutFbLink, {params: { access_token: self.fbToken }})
-            .then(res => {
-              window.location.href = 'index.html'
-            })
-        },
-        onCompleted: function() {
-          let self = this;
-          this.todos.forEach(function(val) {
-            if(!val.status) {
-              val.status = true;
-              self.isCompleted = true;
-              self.isNotYet = false;
-            } else if (val.status) {
-              val.status = false;
-              self.isCompleted = false;
-              self.isNotYet = true;
-            }
-          })
-        },
-        completeTodo: function(id) {
+        // getFbLogoutLink: function() {
+        //   let self = this;
+        //   axios.get('http://localhost:4000/auth/facebook/latestFbUser')
+        //   .then(res => {
+        //     if(res.data.success = true) {
+        //       self.logOutFbLink = `https://graph.facebook.com/${res.data.facebook.id}/permissions?access_token=${res.data.facebook.token}`;
+        //       self.fbToken = res.data.facebook.token;
+        //       // console.log(self.logOutFbLink)
+        //     } else {
+        //       // console.log(res.data)
+        //     }
+        //   })
+        // },
+        // onFbLogOut: function() {
+        //   let self = this;
+        //   axios.delete(self.logOutFbLink, {params: { access_token: self.fbToken }})
+        //     .then(res => {
+        //       window.location.href = 'index.html'
+        //     })
+        // },
+        // onCompleted: function() {
+        //   let self = this;
+        //   this.todos.forEach(function(val) {
+        //     if(!val.status) {
+        //       val.status = true;
+        //       self.isCompleted = true;
+        //       self.isNotYet = false;
+        //     } else if (val.status) {
+        //       val.status = false;
+        //       self.isCompleted = false;
+        //       self.isNotYet = true;
+        //     }
+        //   })
+        // },
+        completeTodo: function(id, index) {
           let self = this;
           // console.log(id)
           axios.put(`http://localhost:4000/api/todos/complete/${id}`, {}, {headers: {token: localStorage.getItem('token')}})
           .then(res => {
             console.log(res)
           })
+          self.todos[index].status = true;
         },
-        onClick: function (e) {
-          let clickedElement = e.target;
-          // let fontAwesome = document.createElement("i"); 
-          if(clickedElement.classList.contains('completed')) {
-              clickedElement.classList.remove('completed');
-              clickedElement.classList.add('uncompleted');
-              // fontAwesome.classList.add('fa', 'fa-times-circle-o')
-              // clickedElement.appendChild(fontAwesome)
-          } else if(clickedElement.classList.contains('uncompleted')) {
-              clickedElement.classList.remove('uncompleted');
-              clickedElement.classList.add('completed');
-              // fontAwesome.classList.add('fa', 'fa-check-circle-o')
-              // clickedElement.appendChild(fontAwesome)
-          }
-          console.log(clickedElement.classList.contains('completed'));
-          // testElement.classList.contains(className)
+        uncompleteTodo: function(id, index) {
+          let self = this;
+          axios.put(`http://localhost:4000/api/todos/uncomplete/${id}`, {}, {headers: {token: localStorage.getItem('token')}})
+          .then(res => {
+            console.log(res)
+          })
+          self.todos[index].status = false;
         },
+        deleteTodo: function(id, index) {
+          let self = this;
+          axios.delete(`http://localhost:4000/api/todos/delete/${id}`, {headers: {token: localStorage.getItem('token')}})
+          .then(res => {
+            console.log(res);
+          })
+          self.todos.splice(index, 1);
+        },
+        // onClick: function (e) {
+        //   let clickedElement = e.target;
+        //   if(clickedElement.classList.contains('completed')) {
+        //       clickedElement.classList.remove('completed');
+        //       clickedElement.classList.add('uncompleted');
+        //   } else if(clickedElement.classList.contains('uncompleted')) {
+        //       clickedElement.classList.remove('uncompleted');
+        //       clickedElement.classList.add('completed');
+        //   }
+        //   console.log(clickedElement.classList.contains('completed'));
+        //   // testElement.classList.contains(className)
+        // },
         addNewTodo: function() {
           let self = this;
           axios.post(`http://localhost:4000/api/todos/create`, {
@@ -183,16 +179,20 @@
             
           }, {headers: {token: localStorage.getItem('token')}})
           .then(res => {
-            window.location.href = 'index.html';
-            alert(`${res.data.todo.title} berhasil kamu tambahkan ke daftar todo`);
+            self.todos.push(res.data.todo)
+            self.getAllTodos();
+            // alert(`${res.data.todo.title} berhasil kamu tambahkan ke daftar todo`);
+            // window.location.href = 'index.html';
           }).catch(err => {
-            alert('kamu harus login dulu');
+            // alert('kamu harus login dulu');
+            console.log(err)
           })
+          
         }
       },
       created: function() {
         this.getAllTodos();
-        this.getFbLogoutLink();
+        // this.getFbLogoutLink();
       },
       computed: {
         gettodos() {

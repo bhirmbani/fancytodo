@@ -20,7 +20,8 @@ methods.isLogin = (req, res, next) => {
     } else {
       res.json({
         msg: 'Anda harus login dulu sebelumnya',
-        success: false
+        success: false,
+        error: err
       })
     }
   })
