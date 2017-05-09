@@ -11,6 +11,9 @@ let todoSchema = new Schema({
   status: {
     type: Boolean
   },
+  message: {
+    type: String
+  },
   dueDate: {
     type: Date
   }

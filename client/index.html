@@ -56,14 +56,22 @@
         
       </div>
       <div class="col-lg-12 text-center">
-        <label for="search">Filter by Title:</label>
-        <input name="search" type="text" class="form-control" v-model="search"/>
+        <div>
+          <label for="filterTitle">Filter:</label>
+          <input name="filterTitle" type="text" class="form-control" v-model="filterTitle" placeholder="ketik judul atau status disini..." />
+        </div>
+        <!-- <div class="col-lg-3">
+          <label for="filterStatus">Filter by status:</label>
+          <input type="filterStatus" type="text" class="form-control" v-model="filterStatus" placeholder="ketik status disini...">
+        </div> -->
+        
       </div>
       <template v-for="(todo, index) in filteredTitle">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos text-center" v-bind:class="{ completed: todos[index].status, uncompleted: !todos[index].status }">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 todos text-center">
           <h1>{{todo.title}}</h1>
           <p>{{todo.content}}</p>
           <p>Dibikin: {{todo.createdAt}}</p>
+          <p class="bg-info">Status: {{todo.message}}</p>
           <button @click="completeTodo(todo.id, index)" class="btn-sm btn-primary">complete</button>
           <button @click="uncompleteTodo(todo.id, index)" class="btn-sm btn-warning">uncomplete</button>
           <button @click="deleteTodo(todo.id, index)" class="btn-sm btn-danger">delete</button>
@@ -91,7 +99,8 @@
         title: '',
         content: '',
         isCompleted: false,
-        search: '',
+        filterTitle: '',
+        filterStatus: '',
       },
       methods: {
         getAllTodos: function() {
@@ -147,6 +156,7 @@
             console.log(res)
           })
           self.todos[index].status = true;
+          self.todos[index].message = 'beres';
         },
         uncompleteTodo: function(id, index) {
           let self = this;
@@ -155,6 +165,7 @@
             console.log(res)
           })
           self.todos[index].status = false;
+          self.todos[index].message = 'pending';
         },
         deleteTodo: function(id, index) {
           let self = this;
@@ -206,7 +217,13 @@
         filteredTitle: function() {
           let self = this;
           return self.todos.filter(function(todo) {
-            return todo.title.indexOf(self.search) !== -1;
+            return todo.title.indexOf(self.filterTitle) !== -1 || todo.message.indexOf(self.filterTitle) !== -1;
+          })
+        },
+        filteredStatus: function() {
+          let self = this;
+          return self.todos.filter(function(todo) {
+            return todo.message.indexOf(self.filterStatus) !== -1;
           })
         }
       }
