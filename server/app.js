@@ -11,51 +11,9 @@ mongoose.connect('mongodb://localhost/fancytodo');
 const authController = require('./controllers/auth');
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('./models/user');
 
-// serialize and deserialize
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(function(id, done) {
-  // done(null, obj);
-  User.findById(id, (err, user) => {
-    done(err, user);
-    console.log(user)
-  })
-});
-
 passport.use(new Strategy(authController.signin));
-passport.use(new FacebookStrategy({
-  clientID: process.env.FB_APP_ID,
-  clientSecret: process.env.FB_APP_SECRET,
-  callbackURL: 'http://localhost:4000/auth/facebook/callback'
-}, function(accessToken, refreshToken, profile, done) {
-  User.findOne({ 'facebook.id': profile.id }, (err, user) => {
-      if(err) {
-        console.log(err);
-      }
-      else {
-        let newUser = new User();
-
-          newUser.facebook.id = profile.id,
-          newUser.facebook.token = accessToken,
-          // newUser.facebook.email = profile.emails[0].value,
-          newUser.facebook.name = profile.displayName,
-          newUser.facebook.createdAt = new Date()
-
-        newUser.save((err) => {
-          if(err) {
-            console.log(err);
-          } else {
-            console.log('saving user..');
-            done(null, user);
-          }
-        })
-      }
-    })
-}));
 
 // routes
 const todos = require('./routes/todo');

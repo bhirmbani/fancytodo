@@ -5,8 +5,9 @@ const methods = {};
 methods.create = (req, res, next) => {
   let title = req.body.title;
   let content = req.body.content;
+  let dueDate = new Date();
   let status = false;
-  Todo.create({title: title, content: content, status: status }, (err, todo) => {
+  Todo.create({title: title, content: content, status: status, dueDate: dueDate }, (err, todo) => {
     if(err) {
       res.json({error: err, success: false});
     } else {
@@ -28,6 +29,8 @@ methods.getAll = (req, res, next) => {
         obj.content = val.content;
         obj.createdAt = moment.fromNow(val.createdAt);
         obj.updatedAt = moment.fromNow(val.updatedAt);
+        obj.timeCreated = moment.hour(val.createdAt);
+        obj.timeDueDate = moment.hour(val.dueDate);
         obj.status = val.status;
         arr.push(obj);
       })
@@ -41,7 +44,7 @@ methods.complete = (req, res, next) => {
   let arr = [];
   Todo.findOneAndUpdate(query, { $set: { status: true } }, function(err, todo) {
     // arr.push(todo)
-    res.send(todo);
+    res.json({todo: todo});
   })
 }
 

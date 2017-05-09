@@ -10,6 +10,9 @@ let todoSchema = new Schema({
   },
   status: {
     type: Boolean
+  },
+  dueDate: {
+    type: Date
   }
 }, {timestamps: true})
 
