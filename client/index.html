@@ -169,11 +169,17 @@
         },
         deleteTodo: function(id, index) {
           let self = this;
-          axios.delete(`http://localhost:4000/api/todos/delete/${id}`, {headers: {token: localStorage.getItem('token')}})
-          .then(res => {
-            console.log(res);
-          })
-          self.todos.splice(index, 1);
+          var warning = confirm(`Are you sure you want to delete "${this.todos[index].title}:${this.todos[index].content}?"`);
+          if (warning === true) {
+            axios.delete(`http://localhost:4000/api/todos/delete/${id}`, {headers: {token: localStorage.getItem('token')}})
+            .then(res => {
+              console.log(res);
+            })
+            self.todos.splice(index, 1);
+          } else {
+            console.log('cancel');
+          }
+          
         },
         // onClick: function (e) {
         //   let clickedElement = e.target;
@@ -220,12 +226,12 @@
             return todo.title.indexOf(self.filterTitle) !== -1 || todo.message.indexOf(self.filterTitle) !== -1;
           })
         },
-        filteredStatus: function() {
-          let self = this;
-          return self.todos.filter(function(todo) {
-            return todo.message.indexOf(self.filterStatus) !== -1;
-          })
-        }
+        // filteredStatus: function() {
+        //   let self = this;
+        //   return self.todos.filter(function(todo) {
+        //     return todo.message.indexOf(self.filterStatus) !== -1;
+        //   })
+        // }
       }
     })
 
